@@ -1,0 +1,165 @@
+{
+    "appid": "adf6abf2-e9b1-4836-935a-20c89623ed2b",
+    "name": "Brinqa",
+    "description": "Brinqa",
+    "type": "information",
+    "product_vendor": "Brinqa",
+    "logo": "brinqa.png",
+    "logo_dark": "brinqa_dark.png",
+    "product_name": "GraphQL API",
+    "python_version": "3",
+    "product_version_regex": ".*",
+    "publisher": "Asurion",
+    "license": "Copyright (c) Asurion, 2022",
+    "app_version": "1.5.0",
+    "utctime_updated": "2022-08-17T19:03:18.409213Z",
+    "package_name": "phantom_brinqa",
+    "main_module": "brinqa_connector.py",
+    "min_phantom_version": "5.3.2.88192",
+    "app_wizard_version": "1.0.0",
+    "configuration": {
+        "base_url": {
+            "description": "URL to Brinqa",
+            "data_type": "string",
+            "required": true,
+            "value_list": [],
+            "default": "",
+            "order": 0,
+            "name": "base_url",
+            "id": 0
+        },
+        "username": {
+            "description": "User to access Brinqa",
+            "data_type": "string",
+            "required": true,
+            "value_list": [],
+            "default": "",
+            "order": 1,
+            "name": "username",
+            "id": 1
+        },
+        "password": {
+            "description": "Password for User",
+            "data_type": "password",
+            "required": true,
+            "order": 2,
+            "name": "password",
+            "id": 2
+        }
+    },
+    "actions": [
+        {
+            "action": "test connectivity",
+            "identifier": "test_connectivity",
+            "description": "Validate the asset configuration for connectivity using supplied configuration",
+            "verbose": "",
+            "type": "test",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "query brinqa",
+            "identifier": "query_brinqa",
+            "description": "Supply data model, filter, and return strings to retrieve information from Brinqa",
+            "verbose": "Supply a data model to filter on. Then, supply a filter string, such as display = \"DISPLAY_NAME\" or ipAddresses = \"IP_ADDRESS\". Finally, supply a return values string, such as name ipv4 ipv6 risk, it is space delineated. This will return the information from the attributes of the return values on the assets specified by the filter. You can supply only a data model and return all the attributes associated with it. To do so, you use the singular form of the model. To utilize the filtering and return, you use the plural form of the model.",
+            "type": "generic",
+            "read_only": false,
+            "parameters": {
+                "data_model": {
+                    "description": "data model to query",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 0,
+                    "name": "data_model",
+                    "id": 1,
+                    "param_name": "data_model"
+                },
+                "filter": {
+                    "description": "filter on attributes in data model",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 1,
+                    "name": "filter",
+                    "id": 2,
+                    "param_name": "filter"
+                },
+                "return_values": {
+                    "description": "attributes to include in return",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "contains": [],
+                    "value_list": [],
+                    "default": "",
+                    "order": 2,
+                    "name": "return_values",
+                    "id": 3,
+                    "param_name": "return_values"
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.data_model",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "data_model",
+                    "column_order": 0
+                },
+                {
+                    "data_path": "action_result.parameter.filter",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "filter",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.return_values",
+                    "data_type": "string",
+                    "contains": [],
+                    "column_name": "return_values",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "status",
+                    "column_order": 3
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        }
+    ],
+    "custom_made": true,
+    "directory": "brinqa_adf6abf2-e9b1-4836-935a-20c89623ed2b",
+    "version": 1,
+    "appname": "-",
+    "executable": "spawn3",
+    "disabled": false,
+    "copied_from_id": 245,
+    "copied_from_version": "1.4.0"
+}
