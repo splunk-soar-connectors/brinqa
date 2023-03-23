@@ -9,17 +9,12 @@ from __future__ import print_function, unicode_literals
 
 import json
 
-# Usage of the consts file is recommended
-from typing import List
-
 # Phantom App imports
 import phantom.app as phantom
 import requests
 from bs4 import BeautifulSoup
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
-from requests import Session
-from requests.models import Response
 
 
 class RetVal(tuple):
@@ -54,7 +49,6 @@ class BrinqaConnector(BaseConnector):
     def _process_html_response(self, response, action_result):
         # An html response, treat it like an error
         status_code = response.status_code
-        self.debug_print("I am about to ruin your day")
         try:
             soup = BeautifulSoup(response.text, "html.parser")
             error_text = soup.text
@@ -89,7 +83,6 @@ class BrinqaConnector(BaseConnector):
 
             if resp_json:
                 if resp_json.get("errors"):
-                    self.debug_print(resp_json.get("errors")[0].get("message"))
                     return RetVal(
                         action_result.set_status(
                             phantom.APP_ERROR,
@@ -243,7 +236,9 @@ class BrinqaConnector(BaseConnector):
                     None,
                 )
             else:
-                self.save_progress("Test Connectivity Failed: Data. Check to make sure the account has GraphQL Permissions.")
+                self.save_progress(
+                    "Test Connectivity Failed: Data. Check to make sure the account has GraphQL Permissions."
+                )
                 return RetVal(
                     action_result.set_status(
                         phantom.APP_ERROR,
@@ -252,9 +247,7 @@ class BrinqaConnector(BaseConnector):
                     None,
                 )
 
-    def _handle_query_brinqa(
-        self, param
-    ) -> str:
+    def _handle_query_brinqa(self, param) -> str:
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress("Logging in")
         self._make_rest_call(
@@ -275,13 +268,11 @@ class BrinqaConnector(BaseConnector):
         self.save_progress("Connecting to endpoint")
         # make a graph rest call to receive information about all items in identifier
         headers = {"Authorization": token_type + " " + token}
-        flag = False
         if "filter" in param and "return_values" in param:
-            flag = True
-            data_model = f"{param['data_model']}"  
+            data_model = f"{param['data_model']}"
             data_model_lower = data_model[0].lower() + data_model[1:]
-            filter_string = f"{param['filter']}"  
-            return_string = f"{{{param['return_values']}}}"  
+            filter_string = f"{param['filter']}"
+            return_string = f"{{{param['return_values']}}}"
             user_post_body = {
                 "query": f'query MyQuery{{ {data_model_lower}(filter: "{filter_string}") {return_string}}}',
                 "operationName": "MyQuery",
@@ -300,9 +291,6 @@ class BrinqaConnector(BaseConnector):
             method="post",
         )
 
-        self.debug_print("Response: ")
-        self.debug_print(response)
-        
         self.save_progress(response.get("data"))
         try:
             for attribute in (
