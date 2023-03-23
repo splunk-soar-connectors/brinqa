@@ -10,6 +10,11 @@
     "python_version": "3",
     "product_version_regex": ".*",
     "publisher": "Asurion",
+    "contributors": [
+        {
+            "name": "Tyler Hitch"
+        }
+    ],
     "license": "Copyright (c) Asurion, 2022",
     "app_version": "1.5.0",
     "utctime_updated": "2022-08-17T19:03:18.409213Z",
