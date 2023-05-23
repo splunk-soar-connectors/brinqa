@@ -69,7 +69,7 @@
             "read_only": false,
             "parameters": {
                 "data_model": {
-                    "description": "data model to query",
+                    "description": "Data model to query",
                     "data_type": "string",
                     "required": true,
                     "order": 0,
@@ -78,7 +78,7 @@
                     "param_name": "data_model"
                 },
                 "filter": {
-                    "description": "filter on attributes in data model",
+                    "description": "Filter on attributes in data model",
                     "data_type": "string",
                     "order": 1,
                     "name": "filter",
@@ -86,7 +86,7 @@
                     "param_name": "filter"
                 },
                 "return_values": {
-                    "description": "attributes to include in return",
+                    "description": "Attributes to include in return",
                     "data_type": "string",
                     "order": 2,
                     "name": "return_values",
