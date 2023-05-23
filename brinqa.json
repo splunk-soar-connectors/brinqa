@@ -4,8 +4,8 @@
     "description": "Brinqa",
     "type": "information",
     "product_vendor": "Brinqa",
-    "logo": "brinqa.png",
-    "logo_dark": "brinqa_dark.png",
+    "logo": "logo_brinqa.svg",
+    "logo_dark": "logo_brinqa_dark.svg",
     "product_name": "GraphQL API",
     "python_version": "3",
     "product_version_regex": ".*",
@@ -15,20 +15,19 @@
             "name": "Tyler Hitch"
         }
     ],
-    "license": "Copyright (c) Asurion, 2022",
-    "app_version": "1.5.0",
+    "license": "Copyright (c) Asurion, 2023",
+    "app_version": "1.0.0",
     "utctime_updated": "2022-08-17T19:03:18.409213Z",
     "package_name": "phantom_brinqa",
     "main_module": "brinqa_connector.py",
     "min_phantom_version": "5.3.2.88192",
     "app_wizard_version": "1.0.0",
+    "fips_compliant": false,
     "configuration": {
         "base_url": {
             "description": "URL to Brinqa",
             "data_type": "string",
             "required": true,
-            "value_list": [],
-            "default": "",
             "order": 0,
             "name": "base_url",
             "id": 0
@@ -37,8 +36,6 @@
             "description": "User to access Brinqa",
             "data_type": "string",
             "required": true,
-            "value_list": [],
-            "default": "",
             "order": 1,
             "name": "username",
             "id": 1
@@ -57,7 +54,6 @@
             "action": "test connectivity",
             "identifier": "test_connectivity",
             "description": "Validate the asset configuration for connectivity using supplied configuration",
-            "verbose": "",
             "type": "test",
             "read_only": true,
             "parameters": {},
@@ -76,10 +72,6 @@
                     "description": "data model to query",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 0,
                     "name": "data_model",
                     "id": 1,
@@ -88,11 +80,6 @@
                 "filter": {
                     "description": "filter on attributes in data model",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 1,
                     "name": "filter",
                     "id": 2,
@@ -101,11 +88,6 @@
                 "return_values": {
                     "description": "attributes to include in return",
                     "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "",
                     "order": 2,
                     "name": "return_values",
                     "id": 3,
@@ -114,31 +96,40 @@
             },
             "output": [
                 {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 3,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
+                },
+                {
                     "data_path": "action_result.parameter.data_model",
                     "data_type": "string",
-                    "contains": [],
-                    "column_name": "data_model",
+                    "column_name": "Data Model",
                     "column_order": 0
                 },
                 {
                     "data_path": "action_result.parameter.filter",
                     "data_type": "string",
-                    "contains": [],
-                    "column_name": "filter",
+                    "column_name": "Filter",
                     "column_order": 1
                 },
                 {
                     "data_path": "action_result.parameter.return_values",
                     "data_type": "string",
-                    "contains": [],
-                    "column_name": "return_values",
+                    "column_name": "Return Values",
                     "column_order": 2
                 },
                 {
-                    "data_path": "action_result.status",
-                    "data_type": "string",
-                    "column_name": "status",
-                    "column_order": 3
+                    "data_path": "action_result.data",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.summary",
+                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.message",
@@ -146,11 +137,17 @@
                 },
                 {
                     "data_path": "summary.total_objects",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 },
                 {
                     "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
                 }
             ],
             "render": {
@@ -166,5 +163,69 @@
     "executable": "spawn3",
     "disabled": false,
     "copied_from_id": 245,
-    "copied_from_version": "1.4.0"
+    "copied_from_version": "1.4.0",
+    "pip_dependencies": {
+        "wheel": [
+            {
+                "module": "beautifulsoup4",
+                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
+            },
+            {
+                "module": "certifi",
+                "input_file": "wheels/py3/certifi-2023.5.7-py3-none-any.whl"
+            },
+            {
+                "module": "chardet",
+                "input_file": "wheels/shared/chardet-3.0.4-py2.py3-none-any.whl"
+            },
+            {
+                "module": "idna",
+                "input_file": "wheels/shared/idna-2.10-py2.py3-none-any.whl"
+            },
+            {
+                "module": "requests",
+                "input_file": "wheels/shared/requests-2.25.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "soupsieve",
+                "input_file": "wheels/py3/soupsieve-2.3.2.post1-py3-none-any.whl"
+            },
+            {
+                "module": "urllib3",
+                "input_file": "wheels/shared/urllib3-1.26.16-py2.py3-none-any.whl"
+            }
+        ]
+    },
+    "pip39_dependencies": {
+        "wheel": [
+            {
+                "module": "beautifulsoup4",
+                "input_file": "wheels/py3/beautifulsoup4-4.9.1-py3-none-any.whl"
+            },
+            {
+                "module": "certifi",
+                "input_file": "wheels/py3/certifi-2023.5.7-py3-none-any.whl"
+            },
+            {
+                "module": "chardet",
+                "input_file": "wheels/shared/chardet-3.0.4-py2.py3-none-any.whl"
+            },
+            {
+                "module": "idna",
+                "input_file": "wheels/shared/idna-2.10-py2.py3-none-any.whl"
+            },
+            {
+                "module": "requests",
+                "input_file": "wheels/shared/requests-2.25.0-py2.py3-none-any.whl"
+            },
+            {
+                "module": "soupsieve",
+                "input_file": "wheels/py3/soupsieve-2.4.1-py3-none-any.whl"
+            },
+            {
+                "module": "urllib3",
+                "input_file": "wheels/shared/urllib3-1.26.16-py2.py3-none-any.whl"
+            }
+        ]
+    }
 }
