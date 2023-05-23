@@ -151,7 +151,7 @@ class BrinqaConnector(BaseConnector):
         # **kwargs will be the JSON to make the query and any additional arguments.
         config = self.get_config()
 
-        self.degub_print(self.get_config())
+        self.debug_print(self.get_config())
 
         resp_json = None
 
@@ -195,7 +195,7 @@ class BrinqaConnector(BaseConnector):
         # Also typically it does not add any data into an action_result either.
         # The status and progress messages are more important.
 
-        self.degub_print("Logging in")
+        self.debug_print("Logging in")
         self._make_rest_call(
             f"/api/auth/authMethod?email={self._username}", action_result, method="get"
         )
@@ -206,13 +206,13 @@ class BrinqaConnector(BaseConnector):
         )
         # Accurate User, Pass, and Path here
         if phantom.is_fail(ret_val):
-            self.degub_print("Failed to Logon.")
+            self.debug_print("Failed to Logon.")
             return action_result.get_status()
         else:
             token = response["access_token"]
             token_type = response["token_type"]
 
-        self.degub_print("Connecting to endpoint")
+        self.debug_print("Connecting to endpoint")
         # make rest call
         headers = {"Authorization": token_type + " " + token}
         user_post_body = {
@@ -226,7 +226,7 @@ class BrinqaConnector(BaseConnector):
             method="post",
         )
         if phantom.is_fail(ret_val):
-            self.degub_print("Test Connectivity Failed: Graph Response")
+            self.debug_print("Test Connectivity Failed: Graph Response")
             return RetVal(
                 action_result.set_status(
                     phantom.APP_ERROR,
@@ -236,7 +236,7 @@ class BrinqaConnector(BaseConnector):
             )
         else:
             if response["data"]["assets"]:
-                self.degub_print("Test Connectivity Passed")
+                self.debug_print("Test Connectivity Passed")
                 return RetVal(
                     action_result.set_status(
                         phantom.APP_SUCCESS,
@@ -245,7 +245,7 @@ class BrinqaConnector(BaseConnector):
                     None,
                 )
             else:
-                self.degub_print(
+                self.debug_print(
                     "Test Connectivity Failed: Data. Check to make sure the account has GraphQL Permissions."
                 )
                 return RetVal(
@@ -258,7 +258,7 @@ class BrinqaConnector(BaseConnector):
 
     def _handle_query_brinqa(self, param) -> str:
         action_result = self.add_action_result(ActionResult(dict(param)))
-        self.degub_print("Logging in")
+        self.debug_print("Logging in")
         self._make_rest_call(
             f"/api/auth/authMethod?email={self._username}", action_result, method="get"
         )
@@ -268,13 +268,13 @@ class BrinqaConnector(BaseConnector):
             "/api/auth/login", action_result, json=auth_post_body, method="post"
         )
         if phantom.is_fail(ret_val):
-            self.degub_print("Failed login.")
+            self.debug_print("Failed login.")
             return action_result.get_status()
         else:
             token = response["access_token"]
             token_type = response["token_type"]
 
-        self.degub_print("Connecting to endpoint")
+        self.debug_print("Connecting to endpoint")
         # make a graph rest call to receive information about all items in identifier
         headers = {"Authorization": token_type + " " + token}
         if "filter" in param and "return_values" in param:
@@ -300,7 +300,7 @@ class BrinqaConnector(BaseConnector):
             method="post",
         )
 
-        self.degub_print(response.get("data"))
+        self.debug_print(response.get("data"))
         try:
             for attribute in (
                 response.get("data", {}).get("__type", {}).get("fields", {})
@@ -309,7 +309,7 @@ class BrinqaConnector(BaseConnector):
         except AttributeError:
             pass
         if phantom.is_fail(ret_val):
-            self.degub_print("Failed to return the graph query.")
+            self.debug_print("Failed to return the graph query.")
             return RetVal(
                 action_result.set_status(
                     phantom.APP_ERROR,
@@ -322,14 +322,14 @@ class BrinqaConnector(BaseConnector):
                 "data", False
             ).get("__type"):
                 if response.get("data", {}).get(f"{param['data_model']}"):
-                    self.degub_print(
+                    self.debug_print(
                         response.get("data", {}).get(f"{param['data_model']}")
                     )
                     action_result.add_data(
                         response.get("data", {}).get(f"{param['data_model']}")
                     )
                 else:
-                    self.degub_print(response.get("data", {}).get("__type"))
+                    self.debug_print(response.get("data", {}).get("__type"))
                 return RetVal(
                     action_result.set_status(
                         phantom.APP_SUCCESS, status_message="Graph query successful."
@@ -337,7 +337,7 @@ class BrinqaConnector(BaseConnector):
                     None,
                 )
             else:
-                self.degub_print("Graph query returned, but contained no data.")
+                self.debug_print("Graph query returned, but contained no data.")
                 return RetVal(
                     action_result.set_status(
                         phantom.APP_SUCCESS,

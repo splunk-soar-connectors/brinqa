@@ -1,7 +1,7 @@
 {
     "appid": "adf6abf2-e9b1-4836-935a-20c89623ed2b",
     "name": "Brinqa",
-    "description": "Brinqa",
+    "description": "The query in this app is a query against the GraphQL console. There are two direct usages, the first is to put in a singular model name (ie: Asset) to return the attributes that exist under that model. Otherwise, a pluralized version of the model is used (ie: assets, note case sensitivity) in conjunction with a filter string (ie: name = assetName) and a list of return values, space delineated (ie: ip id name risk) to return information, in the case of the example, on an asset with a specific name",
     "type": "information",
     "product_vendor": "Brinqa",
     "logo": "logo_brinqa.svg",
@@ -20,7 +20,7 @@
     "utctime_updated": "2022-08-17T19:03:18.409213Z",
     "package_name": "phantom_brinqa",
     "main_module": "brinqa_connector.py",
-    "min_phantom_version": "5.3.2.88192",
+    "min_phantom_version": "6.0.0",
     "app_wizard_version": "1.0.0",
     "fips_compliant": false,
     "configuration": {
