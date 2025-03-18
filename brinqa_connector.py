@@ -1,6 +1,6 @@
 # File: brinqa_connector.py
 #
-# Copyright (c) Asurion, 2023
+# Copyright (c) Asurion, 2023-2025
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
 # and limitations under the License.
 #
 
-from __future__ import print_function, unicode_literals
 
 import json
 
@@ -33,9 +32,8 @@ class RetVal(tuple):
 
 class BrinqaConnector(BaseConnector):
     def __init__(self):
-
         # Call the BaseConnectors init first
-        super(BrinqaConnector, self).__init__()
+        super().__init__()
 
         self._state = None
 
@@ -49,9 +47,7 @@ class BrinqaConnector(BaseConnector):
             return RetVal(phantom.APP_SUCCESS, {})
 
         return RetVal(
-            action_result.set_status(
-                phantom.APP_ERROR, "Empty response and no information in the header"
-            ),
+            action_result.set_status(phantom.APP_ERROR, "Empty response and no information in the header"),
             None,
         )
 
@@ -67,9 +63,7 @@ class BrinqaConnector(BaseConnector):
         except:
             error_text = "Cannot parse error details"
 
-        message = "Status Code: {0}. Data from server:\n{1}\n".format(
-            status_code, error_text
-        )
+        message = f"Status Code: {status_code}. Data from server:\n{error_text}\n"
 
         message = message.replace("{", "{{").replace("}", "}}")
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
@@ -82,14 +76,13 @@ class BrinqaConnector(BaseConnector):
             return RetVal(
                 action_result.set_status(
                     phantom.APP_ERROR,
-                    "Unable to parse JSON response. Error: {0}".format(str(e)),
+                    f"Unable to parse JSON response. Error: {e!s}",
                 ),
                 None,
             )
 
         # Please specify the status codes here
         if 200 <= r.status_code < 399:
-
             if resp_json:
                 if resp_json.get("errors"):
                     return RetVal(
@@ -100,16 +93,14 @@ class BrinqaConnector(BaseConnector):
                         resp_json,
                     )
                 message = "Graph query successful"
-                return RetVal(
-                    action_result.set_status(phantom.APP_SUCCESS, message), resp_json
-                )
+                return RetVal(action_result.set_status(phantom.APP_SUCCESS, message), resp_json)
             else:
                 message = "Graph query returned, but contained no data."
                 return RetVal(action_result.set_status(phantom.APP_SUCCESS, message))
             # Add if to check if empty
 
         # You should process the error returned in the json
-        message = "Error from server. Status Code: {0} Data from server: {1}".format(
+        message = "Error from server. Status Code: {} Data from server: {}".format(
             r.status_code, r.text.replace("{", "{{").replace("}", "}}")
         )  # add clarification on error
 
@@ -140,7 +131,7 @@ class BrinqaConnector(BaseConnector):
             return self._process_empty_response(r, action_result)
 
         # everything else is actually an error at this point
-        message = "Can't process response from server. Status Code: {0} Data from server: {1}".format(
+        message = "Can't process response from server. Status Code: {} Data from server: {}".format(
             r.status_code, r.text.replace("{", "{{").replace("}", "}}")
         )
 
@@ -159,9 +150,7 @@ class BrinqaConnector(BaseConnector):
             request_func = getattr(requests, method)
         except AttributeError:
             return RetVal(
-                action_result.set_status(
-                    phantom.APP_ERROR, "Invalid method: {0}".format(method)
-                ),
+                action_result.set_status(phantom.APP_ERROR, f"Invalid method: {method}"),
                 resp_json,
             )
 
@@ -179,7 +168,7 @@ class BrinqaConnector(BaseConnector):
             return RetVal(
                 action_result.set_status(
                     phantom.APP_ERROR,
-                    "Error Connecting to server. Details: {0}".format(str(e)),
+                    f"Error Connecting to server. Details: {e!s}",
                 ),
                 resp_json,
             )
@@ -196,14 +185,10 @@ class BrinqaConnector(BaseConnector):
         # The status and progress messages are more important.
 
         self.debug_print("Logging in")
-        self._make_rest_call(
-            f"/api/auth/authMethod?email={self._username}", action_result, method="get"
-        )
+        self._make_rest_call(f"/api/auth/authMethod?email={self._username}", action_result, method="get")
         # make rest call
         auth_post_body = {"username": self._username, "password": self._password}
-        ret_val, response = self._make_rest_call(
-            "/api/auth/login", action_result, json=auth_post_body, method="post"
-        )
+        ret_val, response = self._make_rest_call("/api/auth/login", action_result, json=auth_post_body, method="post")
         # Accurate User, Pass, and Path here
         if phantom.is_fail(ret_val):
             self.debug_print("Failed to Logon.")
@@ -215,9 +200,7 @@ class BrinqaConnector(BaseConnector):
         self.debug_print("Connecting to endpoint")
         # make rest call
         headers = {"Authorization": token_type + " " + token}
-        user_post_body = {
-            "query": "query confirmGraphqlAccessible {assets(limit: 1) {display}}"
-        }
+        user_post_body = {"query": "query confirmGraphqlAccessible {assets(limit: 1) {display}}"}
         ret_val, response = self._make_rest_call(
             "/graphql/tvm",
             action_result,
@@ -245,9 +228,7 @@ class BrinqaConnector(BaseConnector):
                     None,
                 )
             else:
-                self.debug_print(
-                    "Test Connectivity Failed: Data. Check to make sure the account has GraphQL Permissions."
-                )
+                self.debug_print("Test Connectivity Failed: Data. Check to make sure the account has GraphQL Permissions.")
                 return RetVal(
                     action_result.set_status(
                         phantom.APP_ERROR,
@@ -259,14 +240,10 @@ class BrinqaConnector(BaseConnector):
     def _handle_query_brinqa(self, param) -> str:
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.debug_print("Logging in")
-        self._make_rest_call(
-            f"/api/auth/authMethod?email={self._username}", action_result, method="get"
-        )
+        self._make_rest_call(f"/api/auth/authMethod?email={self._username}", action_result, method="get")
         # make an auth rest call to login to Brinqa
         auth_post_body = {"username": self._username, "password": self._password}
-        ret_val, response = self._make_rest_call(
-            "/api/auth/login", action_result, json=auth_post_body, method="post"
-        )
+        ret_val, response = self._make_rest_call("/api/auth/login", action_result, json=auth_post_body, method="post")
         if phantom.is_fail(ret_val):
             self.debug_print("Failed login.")
             return action_result.get_status()
@@ -302,9 +279,7 @@ class BrinqaConnector(BaseConnector):
 
         self.debug_print(response.get("data"))
         try:
-            for attribute in (
-                response.get("data", {}).get("__type", {}).get("fields", {})
-            ):
+            for attribute in response.get("data", {}).get("__type", {}).get("fields", {}):
                 action_result.add_data(attribute.get("name"))
         except AttributeError:
             pass
@@ -318,22 +293,14 @@ class BrinqaConnector(BaseConnector):
                 None,
             )
         else:
-            if response.get("data", {}).get(f"{param['data_model']}") or response.get(
-                "data", False
-            ).get("__type"):
+            if response.get("data", {}).get(f"{param['data_model']}") or response.get("data", False).get("__type"):
                 if response.get("data", {}).get(f"{param['data_model']}"):
-                    self.debug_print(
-                        response.get("data", {}).get(f"{param['data_model']}")
-                    )
-                    action_result.add_data(
-                        response.get("data", {}).get(f"{param['data_model']}")
-                    )
+                    self.debug_print(response.get("data", {}).get(f"{param['data_model']}"))
+                    action_result.add_data(response.get("data", {}).get(f"{param['data_model']}"))
                 else:
                     self.debug_print(response.get("data", {}).get("__type"))
                 return RetVal(
-                    action_result.set_status(
-                        phantom.APP_SUCCESS, status_message="Graph query successful."
-                    ),
+                    action_result.set_status(phantom.APP_SUCCESS, status_message="Graph query successful."),
                     None,
                 )
             else:
@@ -406,7 +373,6 @@ def main():
     password = args.password
 
     if username is not None and password is None:
-
         # User specified a username but not a password, so ask
 
         import getpass
