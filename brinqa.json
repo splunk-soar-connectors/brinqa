@@ -7,7 +7,7 @@
     "logo": "logo_brinqa.svg",
     "logo_dark": "logo_brinqa_dark.svg",
     "product_name": "Brinqa GraphQL API",
-    "python_version": "3",
+    "python_version": ["3.9", "3.13"],
     "product_version_regex": ".*",
     "publisher": "Asurion",
     "contributors": [
