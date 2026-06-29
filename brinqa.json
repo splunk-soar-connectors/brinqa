@@ -16,8 +16,8 @@
         }
     ],
     "license": "Copyright (c) Asurion, 2023-2026",
-    "app_version": "1.0.2",
-    "utctime_updated": "2025-04-15T19:02:18.708354Z",
+    "app_version": "1.0.3",
+    "utctime_updated": "2026-06-29T18:37:03.265026Z",
     "package_name": "phantom_brinqa",
     "main_module": "brinqa_connector.py",
     "min_phantom_version": "6.0.0",
