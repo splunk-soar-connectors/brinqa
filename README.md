@@ -1,9 +1,9 @@
 # Brinqa
 
-Publisher: Asurion \
-Connector Version: 1.0.2 \
-Product Vendor: Brinqa \
-Product Name: Brinqa GraphQL API \
+Publisher: Asurion <br>
+Connector Version: 1.0.2 <br>
+Product Vendor: Brinqa <br>
+Product Name: Brinqa GraphQL API <br>
 Minimum Product Version: 6.0.0
 
 The query in this app is a query against the Brinqa GraphQL console. There are two direct usages, the first is to put in a singular model name (ie: Asset) to return the attributes that exist under that model. Otherwise, a pluralized version of the model is used (ie: assets, note case sensitivity) in conjunction with a filter string (ie: name = assetName) and a list of return values, space delineated (ie: ip id name risk) to return information, in the case of the example, on an asset with a specific name
@@ -20,14 +20,14 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration <br>
 [query brinqa](#action-query-brinqa) - Supply data model, filter, and return strings to retrieve information from Brinqa
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity using supplied configuration
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -42,7 +42,7 @@ No Output
 
 Supply data model, filter, and return strings to retrieve information from Brinqa
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 Supply a data model to filter on. Then, supply a filter string, such as display = "DISPLAY_NAME" or ipAddresses = "IP_ADDRESS". Finally, supply a return values string, such as name ipv4 ipv6 risk, it is space delineated. This will return the information from the attributes of the return values on the assets specified by the filter. You can supply only a data model and return all the attributes associated with it. To do so, you use the singular form of the model. To utilize the filtering and return, you use the plural form of the model.
@@ -73,7 +73,7 @@ ______________________________________________________________________
 
 Auto-generated Splunk SOAR Connector documentation.
 
-Copyright 2025 Splunk Inc.
+Copyright 2026 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

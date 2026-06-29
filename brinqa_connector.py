@@ -1,6 +1,6 @@
 # File: brinqa_connector.py
 #
-# Copyright (c) Asurion, 2023-2025
+# Copyright (c) Asurion, 2023-2026
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,12 +15,13 @@
 #
 
 
+import html
 import json
+import re
 
 # Phantom App imports
 import phantom.app as phantom
 import requests
-from bs4 import BeautifulSoup
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 
@@ -55,12 +56,11 @@ class BrinqaConnector(BaseConnector):
         # An html response, treat it like an error
         status_code = response.status_code
         try:
-            soup = BeautifulSoup(response.text, "html.parser")
-            error_text = soup.text
+            error_text = html.unescape(re.sub(r"<[^>]+>", " ", response.text))
             split_lines = error_text.split("\n")
             split_lines = [x.strip() for x in split_lines if x.strip()]
             error_text = "\n".join(split_lines)
-        except:
+        except Exception:
             error_text = "Cannot parse error details"
 
         message = f"Status Code: {status_code}. Data from server:\n{error_text}\n"
@@ -141,8 +141,6 @@ class BrinqaConnector(BaseConnector):
         # **kwargs can be any additional parameters that requests.request accepts
         # **kwargs will be the JSON to make the query and any additional arguments.
         config = self.get_config()
-
-        self.debug_print(self.get_config())
 
         resp_json = None
 
