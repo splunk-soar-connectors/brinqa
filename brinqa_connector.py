@@ -263,9 +263,7 @@ class BrinqaConnector(BaseConnector):
             data_model_lower = data_model[0].lower() + data_model[1:]
             return_values = str(param["return_values"]).split()
             if not return_values or not all(GRAPHQL_NAME_PATTERN.fullmatch(value) for value in return_values):
-                return action_result.set_status(
-                    phantom.APP_ERROR, "Return values must be a space-separated list of valid GraphQL names"
-                )
+                return action_result.set_status(phantom.APP_ERROR, "Return values must be a space-separated list of valid GraphQL names")
             return_string = "{" + " ".join(return_values) + "}"
             user_post_body = {
                 "query": f"query MyQuery($filter: String!){{ {data_model_lower}(filter: $filter) {return_string}}}",
