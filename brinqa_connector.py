@@ -26,6 +26,9 @@ from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 
 
+GRAPHQL_NAME_PATTERN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+
+
 class RetVal(tuple):
     def __new__(cls, val1, val2=None):
         return tuple.__new__(RetVal, (val1, val2))
@@ -159,7 +162,7 @@ class BrinqaConnector(BaseConnector):
             r = request_func(
                 url,
                 # auth=(username, password),  # basic authentication
-                verify=config.get("verify_server_cert", False),
+                verify=config.get("verify_server_cert", True),
                 **kwargs,
             )
         except Exception as e:
@@ -237,6 +240,10 @@ class BrinqaConnector(BaseConnector):
 
     def _handle_query_brinqa(self, param) -> str:
         action_result = self.add_action_result(ActionResult(dict(param)))
+        data_model = str(param["data_model"])
+        if not GRAPHQL_NAME_PATTERN.fullmatch(data_model):
+            return action_result.set_status(phantom.APP_ERROR, "Data model must be a valid GraphQL name")
+
         self.debug_print("Logging in")
         self._make_rest_call(f"/api/auth/authMethod?email={self._username}", action_result, method="get")
         # make an auth rest call to login to Brinqa
@@ -253,19 +260,21 @@ class BrinqaConnector(BaseConnector):
         # make a graph rest call to receive information about all items in identifier
         headers = {"Authorization": token_type + " " + token}
         if "filter" in param and "return_values" in param:
-            data_model = f"{param['data_model']}"
             data_model_lower = data_model[0].lower() + data_model[1:]
-            filter_string = f"{param['filter']}"
-            return_string = f"{{{param['return_values']}}}"
+            return_values = str(param["return_values"]).split()
+            if not return_values or not all(GRAPHQL_NAME_PATTERN.fullmatch(value) for value in return_values):
+                return action_result.set_status(phantom.APP_ERROR, "Return values must be a space-separated list of valid GraphQL names")
+            return_string = "{" + " ".join(return_values) + "}"
             user_post_body = {
-                "query": f'query MyQuery{{ {data_model_lower}(filter: "{filter_string}") {return_string}}}',
+                "query": f"query MyQuery($filter: String!){{ {data_model_lower}(filter: $filter) {return_string}}}",
                 "operationName": "MyQuery",
+                "variables": {"filter": str(param["filter"])},
             }
         else:
-            dataModelCap = f"{param['data_model']}".capitalize()
             user_post_body = {
-                "query": f'query MyQuery{{ __type(name: "{dataModelCap}"){{fields{{name}}}}}}',
+                "query": "query MyQuery($typeName: String!) { __type(name: $typeName) { fields { name } } }",
                 "operationName": "MyQuery",
+                "variables": {"typeName": data_model.capitalize()},
             }
         ret_val, response = self._make_rest_call(
             "/graphql/tvm",

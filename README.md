@@ -17,6 +17,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **base_url** | required | string | URL to Brinqa |
 **username** | required | string | User to access Brinqa |
 **password** | required | password | Password for User |
+**verify_server_cert** | optional | boolean | Verify the server certificate. Disabling verification can expose credentials to network attackers and should only be used in isolated test environments. |
 
 ### Supported Actions
 
