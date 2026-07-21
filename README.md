@@ -1,7 +1,7 @@
 # Brinqa
 
 Publisher: Asurion <br>
-Connector Version: 1.0.3 <br>
+Connector Version: 1.0.4 <br>
 Product Vendor: Brinqa <br>
 Product Name: Brinqa GraphQL API <br>
 Minimum Product Version: 6.0.0

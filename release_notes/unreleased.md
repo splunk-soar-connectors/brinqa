@@ -1,4 +1,1 @@
 **Unreleased**
-
-* Parameterized GraphQL filter values and validated interpolated GraphQL names.
-* Enabled TLS server certificate verification by default.
